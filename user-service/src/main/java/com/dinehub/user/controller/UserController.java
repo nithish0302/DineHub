@@ -3,9 +3,14 @@ package com.dinehub.user.controller;
 import com.dinehub.user.dto.UserResponse;
 import com.dinehub.user.entity.User;
 import com.dinehub.user.service.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
@@ -14,19 +19,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
 
     //POST METHOD
     @PostMapping("/createUser")
-    public ResponseEntity<UserResponse>createuser(@RequestBody User user){
+    public ResponseEntity<UserResponse>createuser(@Valid @RequestBody User user){
         UserResponse response=userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse>login(@RequestParam String email,@RequestParam String password,HttpSession session){
+    public ResponseEntity<UserResponse>login(@NotBlank(message = "Email is required")@Email(message = "Invaild Email Format") @RequestParam String email, @NotBlank(message = "Password is required") @RequestParam String password, HttpSession session){
         UserResponse user=userService.login(email,password);
         session.setAttribute("user",user.getEmail());
         return ResponseEntity.ok(user);
@@ -42,7 +48,7 @@ public class UserController {
 
     //GET METHOD
     @GetMapping("/getUsers")
-    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam String name,HttpSession session){
+    public ResponseEntity<List<UserResponse>> getUsers(@NotBlank(message = "Name is required") @RequestParam String name,HttpSession session){
 
         if(session.getAttribute("user")==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -53,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByEmail/{email}")
-    public ResponseEntity<UserResponse>getUserByEmail(@PathVariable String email,HttpSession session)
+    public ResponseEntity<UserResponse>getUserByEmail(@NotBlank(message = "Email is required") @Email(message = "Invalid Format of Email") @PathVariable String email,HttpSession session)
     {
         if(session.getAttribute("user")==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -65,7 +71,7 @@ public class UserController {
 
     //PUT METHOD
     @PutMapping("/updateUser")
-    public ResponseEntity<UserResponse>updateUser(@RequestParam String email,@RequestBody User user,HttpSession session)
+    public ResponseEntity<UserResponse>updateUser(@NotBlank(message = "Email is required") @Email(message = "Invalid Format of Email") @RequestParam String email,@Valid @RequestBody User user,HttpSession session)
     {
         if(session.getAttribute("user")==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -77,7 +83,7 @@ public class UserController {
 
     //DELETE METHOD
     @DeleteMapping("/deleteUser/{email}")
-    public ResponseEntity<String>deleteUser(@PathVariable String email,HttpSession session){
+    public ResponseEntity<String>deleteUser(@NotBlank(message = "Email is required") @Email(message = "Invalid Format of Email") @PathVariable String email,HttpSession session){
         if(session.getAttribute("user")==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
