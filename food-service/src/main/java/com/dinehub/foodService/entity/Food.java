@@ -1,8 +1,7 @@
 package com.dinehub.foodService.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -27,17 +26,23 @@ public class Food {
     private String name;
 
     @Column(length = 1000)
+    @Size(max=1000,message = "Description must not exceed 1000 characters")
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than zero")
     private BigDecimal price;
 
     @Column(nullable = false)
+    @NotNull(message = "Quantity is required")
+    @PositiveOrZero(message = "Quantity cannot be negative")
     private Integer quantity;
 
     private String imageUrl;
 
     @Column(nullable = false)
+    @NotNull(message = "Availability is required")
     private Boolean isAvailable;
 
     @Column(nullable = false, updatable = false)

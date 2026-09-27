@@ -1,7 +1,8 @@
-package com.dinehub.foodService.service;
+package com.dinehub.foodService.seviceImpl;
 
 import com.dinehub.foodService.repo.FoodRepository;
 import com.dinehub.foodService.entity.Food;
+import com.dinehub.foodService.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

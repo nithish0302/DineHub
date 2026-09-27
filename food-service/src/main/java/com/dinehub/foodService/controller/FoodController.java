@@ -2,6 +2,7 @@ package com.dinehub.foodService.controller;
 
 import com.dinehub.foodService.entity.Food;
 import com.dinehub.foodService.service.FoodService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class FoodController {
     private final FoodService foodService;
 
     @PostMapping
-    public ResponseEntity<Food> createFood(@RequestBody Food food) {
+    public ResponseEntity<Food> createFood( @Valid @RequestBody Food food) {
 
         return new ResponseEntity<>(
                 foodService.createFood(food),
