@@ -1,5 +1,6 @@
 package com.dinehub.foodService.seviceImpl;
 
+import com.dinehub.foodService.exception.FoodNotFoundException;
 import com.dinehub.foodService.repo.FoodRepository;
 import com.dinehub.foodService.entity.Food;
 import com.dinehub.foodService.service.FoodService;
@@ -22,7 +23,11 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Food getFoodById(Long foodId) {
         return foodRepository.findById(foodId)
-                .orElseThrow(() -> new RuntimeException("Food not found"));
+                .orElseThrow(() ->
+                        new FoodNotFoundException(
+                                "Food not found with id: " + foodId
+                        )
+                );
     }
 
     @Override
@@ -51,7 +56,9 @@ public class FoodServiceImpl implements FoodService {
     public void deleteFood(Long foodId) {
 
         if (!foodRepository.existsById(foodId)) {
-            throw new RuntimeException("Food not found");
+            throw new FoodNotFoundException(
+                    "Food not found with id: " + foodId
+            );
         }
 
         foodRepository.deleteById(foodId);
