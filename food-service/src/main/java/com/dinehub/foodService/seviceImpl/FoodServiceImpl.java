@@ -1,7 +1,7 @@
 package com.dinehub.foodService.seviceImpl;
 
 import com.dinehub.foodService.exception.FoodNotFoundException;
-import com.dinehub.foodService.repo.FoodRepository;
+import com.dinehub.foodService.repository.FoodRepository;
 import com.dinehub.foodService.entity.Food;
 import com.dinehub.foodService.service.FoodService;
 import lombok.RequiredArgsConstructor;
