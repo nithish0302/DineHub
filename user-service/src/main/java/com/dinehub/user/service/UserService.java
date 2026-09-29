@@ -15,6 +15,7 @@ public interface UserService {
     //GET METHOD
     List<UserResponse> getUser(String name);
     UserResponse getUserByemail(String email);
+    Boolean existsUserById(Long userId);
 
     //PUT METHOD
     UserResponse updateUser(String email, User user);

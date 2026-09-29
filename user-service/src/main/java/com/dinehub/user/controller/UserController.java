@@ -6,6 +6,7 @@ import com.dinehub.user.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,11 @@ public class UserController {
 
         UserResponse user=userService.getUserByemail(email);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/exists/{userId}")
+    public ResponseEntity<Boolean>existUserById(@NotNull(message = "User Id needed") @PathVariable Long userId){
+        return ResponseEntity.ok(userService.existsUserById(userId));
     }
 
     //PUT METHOD
