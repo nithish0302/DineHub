@@ -74,6 +74,13 @@ public class UserServiceImpl implements UserService {
         return convertToUserResponse(user);
     }
 
+    @Override
+    public Boolean existsUserById(Long userId)
+    {
+        Boolean response=userRepository.existsById(userId);
+        return response;
+    }
+
     //PUT METHOD
     @Override
     public UserResponse updateUser(String email, User user) {

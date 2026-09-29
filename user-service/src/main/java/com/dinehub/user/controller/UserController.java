@@ -68,6 +68,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/exists/{userId}")
+    public ResponseEntity<Boolean>existUserById(@NotNull(message = "User Id needed") @PathVariable Long userId){
+        return ResponseEntity.ok(userService.existsUserById(userId));
+    }
+
     //PUT METHOD
     @PutMapping("/updateUser")
     public ResponseEntity<UserResponse>updateUser(@NotBlank(message = "Email is required") @Email(message = "Invalid Format of Email") @RequestParam String email,@Valid @RequestBody User user,HttpSession session)
