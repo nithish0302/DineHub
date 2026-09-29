@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponse {
 
-    private Long id;
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private  String address;
-    private Role role;
-
+    private Long userId;
+    private String userName;
+    private String userEmail;
+    private String userPhoneNumber;
+    private String userAddress;
+    private Role userRole;
 }
