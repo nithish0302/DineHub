@@ -21,31 +21,31 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     @NotBlank(message = "Name is required")
     @Size(min=3,max=40 ,message = "Name size should between 3 to 40")
-    private String name;
+    private String userName;
 
     @Column(unique = true,nullable = false)
     @NotBlank(message = "Email is required")
     @Email(message = "Email is not in valid format")
-    private String email;
+    private String userEmail;
 
     @NotBlank(message = "Password is required")
     @Size(min=6,message = "Password must contain at least 6 character")
     private String password;
 
     @Pattern(regexp = "^[0-9]{10}$",message = "Phone number must contain exactly 10 digits")
-    private String phoneNumber;
+    private String userPhoneNumber;
 
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role is required")
-    private Role role;
+    private Role userRole;
 
-    private String address;
+    private String userAddress;
 
     @CreationTimestamp
     @Column(nullable = false,updatable = false)

@@ -13,31 +13,33 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private  final UserRepository userRepository;
-    private  final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     //POST METHOD
     @Override
     public UserResponse createUser(User user) {
 
-        if(userRepository.existsByEmail(user.getEmail()))
+        if(userRepository.existsByUserEmail(user.getUserEmail()))
         {
-          throw  new UserAlreadyExistsException("User Already Exists");
+            throw new UserAlreadyExistsException("User Already Exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User newUser=userRepository.save(user);
+        User newUser = userRepository.save(user);
 
-       return convertToUserResponse(newUser);
+        return convertToUserResponse(newUser);
     }
 
     @Override
-    public UserResponse login(String email,String password)
+    public UserResponse login(String email, String password)
     {
-        User user=userRepository.findByEmail(email);
-        if(user==null)
+        User user = userRepository.findByUserEmail(email);
+        if(user == null)
         {
             throw new UserNotFoundException("User Not Found ,Please Create the new account");
         }
@@ -50,10 +52,10 @@ public class UserServiceImpl implements UserService {
     //GET METHOD
     @Override
     public List<UserResponse> getUser(String name) {
-        List<User>userList=userRepository.findByName(name);
+        List<User> userList = userRepository.findByUserName(name);
 
-        List<UserResponse>response = new ArrayList<>();
-        for(User user:userList)
+        List<UserResponse> response = new ArrayList<>();
+        for(User user : userList)
         {
             response.add(convertToUserResponse(user));
         }
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserByemail(String email) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByUserEmail(email);
 
         if (user == null) {
             throw new UserNotFoundException("User Not Found");
@@ -75,47 +77,44 @@ public class UserServiceImpl implements UserService {
     //PUT METHOD
     @Override
     public UserResponse updateUser(String email, User user) {
-        User existingUser = userRepository.findByEmail(email);
+        User existingUser = userRepository.findByUserEmail(email);
 
         if (existingUser == null) {
             throw new UserNotFoundException("User Not Found");
         }
 
-        existingUser.setName(user.getName());
-        existingUser.setPhoneNumber(user.getPhoneNumber());
-        existingUser.setAddress(user.getAddress());
-        existingUser.setRole(user.getRole());
+        existingUser.setUserName(user.getUserName());
+        existingUser.setUserPhoneNumber(user.getUserPhoneNumber());
+        existingUser.setUserAddress(user.getUserAddress());
+        existingUser.setUserRole(user.getUserRole());
 
         User updatedUser = userRepository.save(existingUser);
 
-     return convertToUserResponse(updatedUser);
+        return convertToUserResponse(updatedUser);
     }
-
 
     //DELETE METHOD
     @Override
     @Transactional
     public String deleteUser(String email) {
 
-        if (!userRepository.existsByEmail(email)) {
+        if (!userRepository.existsByUserEmail(email)) {
             throw new UserNotFoundException("User Not Found");
         }
 
-        userRepository.deleteByEmail(email);
+        userRepository.deleteByUserEmail(email);
 
         return "User deleted successfully";
     }
+
     private UserResponse convertToUserResponse(User user){
         return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPhoneNumber(),
-                user.getAddress(),
-                user.getRole()
-
+                user.getUserId(),
+                user.getUserName(),
+                user.getUserEmail(),
+                user.getUserPhoneNumber(),
+                user.getUserAddress(),
+                user.getUserRole()
         );
     }
 }
-
-

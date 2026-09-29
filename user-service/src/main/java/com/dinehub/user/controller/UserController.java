@@ -6,7 +6,6 @@ import com.dinehub.user.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserResponse>login(@NotBlank(message = "Email is required")@Email(message = "Invaild Email Format") @RequestParam String email, @NotBlank(message = "Password is required") @RequestParam String password, HttpSession session){
         UserResponse user=userService.login(email,password);
-        session.setAttribute("user",user.getEmail());
+        session.setAttribute("user",user.getUserEmail());
         return ResponseEntity.ok(user);
     }
 
