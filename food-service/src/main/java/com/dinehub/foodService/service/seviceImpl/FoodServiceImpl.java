@@ -1,4 +1,4 @@
-package com.dinehub.foodService.seviceImpl;
+package com.dinehub.foodService.service.seviceImpl;
 
 import com.dinehub.foodService.exception.FoodNotFoundException;
 import com.dinehub.foodService.repository.FoodRepository;
