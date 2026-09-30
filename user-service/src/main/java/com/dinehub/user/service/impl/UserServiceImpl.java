@@ -36,9 +36,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse login(String email, String password)
+    public UserResponse login(String userEmail, String password)
     {
-        User user = userRepository.findByUserEmail(email);
+        User user = userRepository.findByUserEmail(userEmail);
         if(user == null)
         {
             throw new UserNotFoundException("User Not Found ,Please Create the new account");
@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
 
     //GET METHOD
     @Override
-    public List<UserResponse> getUser(String name) {
-        List<User> userList = userRepository.findByUserName(name);
+    public List<UserResponse> getUser(String userName) {
+        List<User> userList = userRepository.findByUserName(userName);
 
         List<UserResponse> response = new ArrayList<>();
         for(User user : userList)
@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserByemail(String email) {
+    public UserResponse getUserByEmail(String userEmail) {
 
-        User user = userRepository.findByUserEmail(email);
+        User user = userRepository.findByUserEmail(userEmail);
 
         if (user == null) {
             throw new UserNotFoundException("User Not Found");
@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
 
     //PUT METHOD
     @Override
-    public UserResponse updateUser(String email, User user) {
-        User existingUser = userRepository.findByUserEmail(email);
+    public UserResponse updateUser(String userEmail, User user) {
+        User existingUser = userRepository.findByUserEmail(userEmail);
 
         if (existingUser == null) {
             throw new UserNotFoundException("User Not Found");
@@ -103,13 +103,13 @@ public class UserServiceImpl implements UserService {
     //DELETE METHOD
     @Override
     @Transactional
-    public String deleteUser(String email) {
+    public String deleteUser(String userEmail) {
 
-        if (!userRepository.existsByUserEmail(email)) {
+        if (!userRepository.existsByUserEmail(userEmail)) {
             throw new UserNotFoundException("User Not Found");
         }
 
-        userRepository.deleteByUserEmail(email);
+        userRepository.deleteByUserEmail(userEmail);
 
         return "User deleted successfully";
     }

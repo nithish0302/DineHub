@@ -65,7 +65,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        UserResponse user=userService.getUserByemail(email);
+        UserResponse user=userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
 

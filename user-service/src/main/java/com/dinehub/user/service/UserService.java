@@ -5,21 +5,23 @@ import com.dinehub.user.entity.User;
 
 import java.util.List;
 
-
 public interface UserService {
 
-    //POST METHOD
-    UserResponse createUser(User user) ;
-    UserResponse login(String email,String password);
+    // POST METHOD
+    UserResponse createUser(User user);
 
-    //GET METHOD
-    List<UserResponse> getUser(String name);
-    UserResponse getUserByemail(String email);
+    UserResponse login(String userEmail, String password);
+
+    // GET METHOD
+    List<UserResponse> getUser(String userName);
+
+    UserResponse getUserByEmail(String userEmail);
+
     Boolean existsUserById(Long userId);
 
-    //PUT METHOD
-    UserResponse updateUser(String email, User user);
+    // PUT METHOD
+    UserResponse updateUser(String userEmail, User user);
 
-    //DELETE METHOD
-    String deleteUser(String email);
+    // DELETE METHOD
+    String deleteUser(String userEmail);
 }
