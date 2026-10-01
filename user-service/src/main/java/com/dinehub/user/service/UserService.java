@@ -1,5 +1,6 @@
 package com.dinehub.user.service;
 
+import com.dinehub.user.dto.LoginResponse;
 import com.dinehub.user.dto.UserResponse;
 import com.dinehub.user.entity.User;
 
@@ -10,7 +11,7 @@ public interface UserService {
     // POST METHOD
     UserResponse createUser(User user);
 
-    UserResponse login(String userEmail, String password);
+    LoginResponse login(String userEmail, String password);
 
     // GET METHOD
     List<UserResponse> getUser(String userName);
