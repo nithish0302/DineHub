@@ -1,8 +1,10 @@
 package com.dinehub.user.controller;
 
 import com.dinehub.user.dto.LoginResponse;
+import com.dinehub.user.dto.UpdateUserRequest;
 import com.dinehub.user.dto.UserResponse;
 import com.dinehub.user.entity.User;
+import com.dinehub.user.service.RefreshTokenService;
 import com.dinehub.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
 
     //POST METHOD
     @PostMapping("/createUser")
@@ -40,12 +43,21 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refreshAccessToken(
+            @RequestParam String refreshToken) {
+
+        String accessToken =
+                refreshTokenService.refreshAccessToken(refreshToken);
+
+        return ResponseEntity.ok(accessToken);
+    }
+
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization")String authorizationHeader ) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest().body("Invalid Authorization header");
-        }
-        String token = authorizationHeader.substring(7);
+    public ResponseEntity<String> logout(
+            @RequestParam String refreshToken) {
+
+        refreshTokenService.deleteRefreshToken(refreshToken);
 
         return ResponseEntity.ok("Logout successful");
     }
@@ -76,11 +88,16 @@ public class UserController {
 
     //PUT METHOD
     @PutMapping("/updateUser")
-    public ResponseEntity<UserResponse>updateUser(@NotBlank(message = "Email is required") @Email(message = "Invalid Format of Email") @RequestParam String email,@Valid @RequestBody User user )
-    {
+    public ResponseEntity<UserResponse> updateUser(
+            @NotBlank(message = "Email is required")
+            @Email(message = "Invalid Email Format")
+            @RequestParam String email,
 
+            @Valid @RequestBody UpdateUserRequest request) {
 
-        UserResponse response=userService.updateUser(email,user);
+        UserResponse response =
+                userService.updateUser(email, request);
+
         return ResponseEntity.ok(response);
     }
 

@@ -1,6 +1,7 @@
 package com.dinehub.user.service.impl;
 
 import com.dinehub.user.dto.LoginResponse;
+import com.dinehub.user.dto.UpdateUserRequest;
 import com.dinehub.user.dto.UserResponse;
 import com.dinehub.user.entity.RefreshToken;
 import com.dinehub.user.entity.User;
@@ -12,11 +13,9 @@ import com.dinehub.user.service.RefreshTokenService;
 import com.dinehub.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,14 +74,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(
-            @RequestParam String refreshToken) {
 
-        refreshTokenService.deleteRefreshToken(refreshToken);
-
-        return ResponseEntity.ok("Logout successful");
-    }
 
     //GET METHOD
     @Override
@@ -118,19 +110,24 @@ public class UserServiceImpl implements UserService {
 
     //PUT METHOD
     @Override
-    public UserResponse updateUser(String userEmail, User user) {
-        User existingUser = userRepository.findByUserEmail(userEmail);
+    public UserResponse updateUser(
+            String userEmail,
+            UpdateUserRequest request) {
+
+        User existingUser =
+                userRepository.findByUserEmail(userEmail);
 
         if (existingUser == null) {
             throw new UserNotFoundException("User Not Found");
         }
 
-        existingUser.setUserName(user.getUserName());
-        existingUser.setUserPhoneNumber(user.getUserPhoneNumber());
-        existingUser.setUserAddress(user.getUserAddress());
-        existingUser.setUserRole(user.getUserRole());
+        existingUser.setUserName(request.getUserName());
+        existingUser.setUserPhoneNumber(request.getUserPhoneNumber());
+        existingUser.setUserAddress(request.getUserAddress());
+        existingUser.setUserRole(request.getUserRole());
 
-        User updatedUser = userRepository.save(existingUser);
+        User updatedUser =
+                userRepository.save(existingUser);
 
         return convertToUserResponse(updatedUser);
     }

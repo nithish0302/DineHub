@@ -48,6 +48,21 @@ public class    GlobalExceptionHandler  {
         ErrorDetail error=new ErrorDetail(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
         return ResponseEntity.internalServerError().body(error);
     }
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ErrorDetail> handleInvalidRefreshToken(
+            InvalidRefreshTokenException ex,
+            WebRequest request) {
+
+        ErrorDetail error = new ErrorDetail(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(error);
+    }
 
     //Handle User not found exception
     @ExceptionHandler(UserNotFoundException.class)

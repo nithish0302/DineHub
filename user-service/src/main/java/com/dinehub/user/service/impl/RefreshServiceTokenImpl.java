@@ -2,11 +2,13 @@ package com.dinehub.user.service.impl;
 
 import com.dinehub.user.entity.RefreshToken;
 import com.dinehub.user.entity.User;
+import com.dinehub.user.exception.InvalidRefreshTokenException;
 import com.dinehub.user.exception.UserNotFoundException;
 import com.dinehub.user.repository.RefreshTokenRepository;
 import com.dinehub.user.repository.UserRepository;
 import com.dinehub.user.security.JwtService;
 import com.dinehub.user.service.RefreshTokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class RefreshServiceTokenImpl implements RefreshTokenService {
 
     @Value("${refresh-token.expiration}")
     private long refreshTokenExpiration;
+
     @Override
     public RefreshToken createRefreshToken(Long userId) {
 
@@ -32,7 +35,8 @@ public class RefreshServiceTokenImpl implements RefreshTokenService {
         refreshToken.setUserId(userId);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(
-                LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000)
+                LocalDateTime.now()
+                        .plusSeconds(refreshTokenExpiration / 1000)
         );
 
         return refreshTokenRepository.save(refreshToken);
@@ -41,24 +45,31 @@ public class RefreshServiceTokenImpl implements RefreshTokenService {
     @Override
     public String refreshAccessToken(String token) {
 
-        RefreshToken refreshToken = refreshTokenRepository
-                .findByToken(token)
-                .orElseThrow(() ->
-                        new RuntimeException("Invalid refresh token")
-                );
+        RefreshToken refreshToken =
+                refreshTokenRepository.findByToken(token)
+                        .orElseThrow(() ->
+                                new InvalidRefreshTokenException(
+                                        "Invalid refresh token"
+                                )
+                        );
 
-        if (refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+        if (refreshToken.getExpiryDate()
+                .isBefore(LocalDateTime.now())) {
 
             refreshTokenRepository.deleteByToken(token);
 
-            throw new RuntimeException("Refresh token expired");
+            throw new InvalidRefreshTokenException(
+                    "Refresh token expired"
+            );
         }
 
-        User user = userRepository
-                .findById(refreshToken.getUserId())
-                .orElseThrow(() ->
-                        new UserNotFoundException("User Not Found")
-                );
+        User user =
+                userRepository.findById(refreshToken.getUserId())
+                        .orElseThrow(() ->
+                                new UserNotFoundException(
+                                        "User Not Found"
+                                )
+                        );
 
         return jwtService.generateToken(
                 user.getUserEmail()
@@ -66,9 +77,9 @@ public class RefreshServiceTokenImpl implements RefreshTokenService {
     }
 
     @Override
+    @Transactional
     public void deleteRefreshToken(String token) {
 
         refreshTokenRepository.deleteByToken(token);
     }
 }
-

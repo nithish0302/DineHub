@@ -26,6 +26,10 @@ public class PaymentServiceImpl implements PaymentService {
         {
             throw new RuntimeException("User Not Found");
         }
+
+        if (payment.getPaymentStatus() == null) {
+            payment.setPaymentStatus(PaymentStatus.pending);
+        }
         Payment response =paymentRepository.save(payment);
 
         return response;
