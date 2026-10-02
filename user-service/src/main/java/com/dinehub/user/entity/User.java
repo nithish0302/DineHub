@@ -45,7 +45,6 @@ public class User {
     @NotNull(message = "Role is required")
     private Role userRole;
 
-    @Size(max = 255, message = "Address must not exceed 255 characters")
     private String userAddress;
 
     @CreationTimestamp

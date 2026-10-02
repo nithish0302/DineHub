@@ -1,4 +1,4 @@
-package com.dinehub.user.dto;
+package com.dinehub.user.entity;
 
 
 import lombok.AllArgsConstructor;
