@@ -4,11 +4,14 @@ import com.dinehub.user.dto.LoginResponse;
 import com.dinehub.user.dto.UserResponse;
 import com.dinehub.user.entity.User;
 import com.dinehub.user.service.UserService;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

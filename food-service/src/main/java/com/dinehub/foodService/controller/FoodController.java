@@ -17,7 +17,7 @@ public class FoodController {
 
     private final FoodService foodService;
 
-    @PostMapping
+    @PostMapping("/createFood")
     public ResponseEntity<Food> createFood( @Valid @RequestBody Food food) {
 
         return new ResponseEntity<>(
@@ -26,7 +26,7 @@ public class FoodController {
         );
     }
 
-    @GetMapping("/{foodId}")
+    @GetMapping("/get/{foodId}")
     public ResponseEntity<Food> getFoodById(
             @PathVariable Long foodId) {
 
@@ -35,7 +35,7 @@ public class FoodController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/get/allFood")
     public ResponseEntity<List<Food>> getAllFood() {
 
         return ResponseEntity.ok(
@@ -43,7 +43,7 @@ public class FoodController {
         );
     }
 
-    @PutMapping("/{foodId}")
+    @PutMapping("/update/{foodId}")
     public ResponseEntity<Food> updateFood(
             @PathVariable Long foodId,
             @RequestBody Food food) {
@@ -53,7 +53,7 @@ public class FoodController {
         );
     }
 
-    @DeleteMapping("/{foodId}")
+    @DeleteMapping("/delete/{foodId}")
     public ResponseEntity<Void> deleteFood(
             @PathVariable Long foodId) {
 
