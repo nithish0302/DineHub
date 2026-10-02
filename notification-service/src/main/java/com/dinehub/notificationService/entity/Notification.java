@@ -1,7 +1,8 @@
 package com.dinehub.notificationService.entity;
 
-import com.dinehub.notificationService.enums.NotificationStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,23 +20,15 @@ public class Notification {
     private Long notificationId;
 
     @Column(name = "user_id")
+    @NotNull(message = "User ID is required")
     private Long userId;
 
     @Column(name = "order_id")
+    @NotNull(message = "Order ID is required")
     private Long orderId;
 
-    @Column(name = "notification_status")
-    @Enumerated(EnumType.STRING)
-    private NotificationStatus notificationStatus;
-
-    @Column(name = "notification_channel")
-    @Enumerated(EnumType.STRING)
-    private NotificationStatus notificationChannel;
-
     @Column(name = "created_at")
+    @PastOrPresent(message = "created time cannot be in the future")
     private LocalDateTime createdAt;
-
-    @Column(name = "sent_at")
-    private LocalDateTime sentAt;
 
 }

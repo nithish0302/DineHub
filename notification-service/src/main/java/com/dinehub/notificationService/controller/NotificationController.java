@@ -3,10 +3,13 @@ package com.dinehub.notificationService.controller;
 import com.dinehub.notificationService.dto.NotificationResponse;
 import com.dinehub.notificationService.entity.Notification;
 import com.dinehub.notificationService.service.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -16,7 +19,9 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/createNotification")
-    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification){
+    public ResponseEntity<Notification> createNotification(@Valid @RequestBody Notification notification){
+
+        notification.setCreatedAt(LocalDateTime.now());
 
         return new ResponseEntity<>(
                 notificationService.createNotification(notification),
