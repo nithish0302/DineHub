@@ -61,4 +61,6 @@ public class FoodController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/price")
 }

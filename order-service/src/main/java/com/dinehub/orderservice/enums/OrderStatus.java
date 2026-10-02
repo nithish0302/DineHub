@@ -1,4 +1,4 @@
-package com.dinehub.orderservice.entity;
+package com.dinehub.orderservice.enums;
 
 public enum OrderStatus {
     confirmed,
