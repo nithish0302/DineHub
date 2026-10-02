@@ -1,15 +1,21 @@
 package com.dinehub.user.service.impl;
 
+import com.dinehub.user.dto.LoginResponse;
+import com.dinehub.user.dto.UpdateUserRequest;
 import com.dinehub.user.dto.UserResponse;
+import com.dinehub.user.entity.RefreshToken;
 import com.dinehub.user.entity.User;
 import com.dinehub.user.exception.UserAlreadyExistsException;
 import com.dinehub.user.exception.UserNotFoundException;
 import com.dinehub.user.repository.UserRepository;
+import com.dinehub.user.security.JwtService;
+import com.dinehub.user.service.RefreshTokenService;
 import com.dinehub.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     //POST METHOD
     @Override
@@ -35,19 +43,38 @@ public class UserServiceImpl implements UserService {
         return convertToUserResponse(newUser);
     }
 
+
     @Override
-    public UserResponse login(String userEmail, String password)
-    {
+    public LoginResponse login(String userEmail, String password) {
+
         User user = userRepository.findByUserEmail(userEmail);
-        if(user == null)
-        {
-            throw new UserNotFoundException("User Not Found ,Please Create the new account");
+
+        if (user == null) {
+            throw new UserNotFoundException(
+                    "User Not Found, Please Create the new account"
+            );
         }
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UserNotFoundException("Invalid email or password");
         }
-        return convertToUserResponse(user);
+
+        String accessToken = jwtService.generateToken(user.getUserEmail());
+
+        RefreshToken refreshToken =
+                refreshTokenService.createRefreshToken(user.getUserId());
+
+        return new LoginResponse(
+                user.getUserId(),
+                user.getUserName(),
+                user.getUserEmail(),
+                user.getUserRole(),
+                accessToken,
+                refreshToken.getToken()
+        );
     }
+
+
 
     //GET METHOD
     @Override
@@ -83,19 +110,24 @@ public class UserServiceImpl implements UserService {
 
     //PUT METHOD
     @Override
-    public UserResponse updateUser(String userEmail, User user) {
-        User existingUser = userRepository.findByUserEmail(userEmail);
+    public UserResponse updateUser(
+            String userEmail,
+            UpdateUserRequest request) {
+
+        User existingUser =
+                userRepository.findByUserEmail(userEmail);
 
         if (existingUser == null) {
             throw new UserNotFoundException("User Not Found");
         }
 
-        existingUser.setUserName(user.getUserName());
-        existingUser.setUserPhoneNumber(user.getUserPhoneNumber());
-        existingUser.setUserAddress(user.getUserAddress());
-        existingUser.setUserRole(user.getUserRole());
+        existingUser.setUserName(request.getUserName());
+        existingUser.setUserPhoneNumber(request.getUserPhoneNumber());
+        existingUser.setUserAddress(request.getUserAddress());
+        existingUser.setUserRole(request.getUserRole());
 
-        User updatedUser = userRepository.save(existingUser);
+        User updatedUser =
+                userRepository.save(existingUser);
 
         return convertToUserResponse(updatedUser);
     }
