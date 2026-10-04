@@ -51,6 +51,9 @@ public class Food {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private Long countAvailable;
+
     @PrePersist //runs before any insert
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
