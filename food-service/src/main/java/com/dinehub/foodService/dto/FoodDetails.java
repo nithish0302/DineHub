@@ -11,4 +11,5 @@ public class FoodDetails {
     private Long id;
     private String name;
     private BigDecimal price;
+    private Long countAvailable;
 }
