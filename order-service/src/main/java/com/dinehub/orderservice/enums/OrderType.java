@@ -1,6 +1,6 @@
 package com.dinehub.orderservice.enums;
 
 public enum OrderType {
-    dinein,
-    delivery
+    DINE_IN,
+    DELIVERY
 }

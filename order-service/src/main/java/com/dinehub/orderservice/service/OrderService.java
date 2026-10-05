@@ -3,6 +3,8 @@ package com.dinehub.orderservice.service;
 import com.dinehub.orderservice.entity.Order;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 
 public interface OrderService {
     public Order createOrder(@Valid Order order);
@@ -12,4 +14,8 @@ public interface OrderService {
     Order updateOrder(Long orderId, @Valid Order order);
 
     void deleteOrder(Long orderId);
+
+    List<Order> getOrderByUserId(Long userId);
+
+    void confirmOrder(Long orderId);
 }
