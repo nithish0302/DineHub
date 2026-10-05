@@ -38,8 +38,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Food updateFood(Long foodId, Food food) {
 
-        Food existingFood = foodRepository.findById(foodId)
-                .orElseThrow(() -> new RuntimeException("Food not found"));
+        Food existingFood = getFoodById(foodId);
 
         existingFood.setName(food.getName());
         existingFood.setDescription(food.getDescription());
@@ -62,5 +61,12 @@ public class FoodServiceImpl implements FoodService {
         }
 
         foodRepository.deleteById(foodId);
+    }
+
+    @Override
+    public void updateFoodCount(Long foodId, Integer neededQuantity) {
+        Food existingFood = getFoodById(foodId);
+        existingFood.setQuantity(existingFood.getQuantity()-neededQuantity);
+        foodRepository.save(existingFood);
     }
 }
