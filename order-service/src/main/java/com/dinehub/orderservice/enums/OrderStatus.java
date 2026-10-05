@@ -1,9 +1,9 @@
 package com.dinehub.orderservice.enums;
 
 public enum OrderStatus {
-    confirmed,
-    preparing,
-    outfordelivery,
-    delivered,
-    cancelled
+    CONFIRMED,
+    PREPARING,
+    OUT_FOR_DELIVERY,
+    DELIVERED,
+    CANCELLED
 }

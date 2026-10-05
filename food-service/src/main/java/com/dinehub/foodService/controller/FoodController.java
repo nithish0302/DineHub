@@ -71,9 +71,5 @@ public class FoodController {
         return ResponseEntity.noContent().build();
     }
 
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
 }

@@ -1,4 +1,13 @@
 package com.dinehub.orderservice.dto;
 
-public class FoodResponse {
+import lombok.Getter;
+
+import java.math.BigDecimal;
+
+@Getter
+public class FoodDetails {
+    private Long id;
+    private String name;
+    private BigDecimal price;
+    private Integer countAvailable;
 }
