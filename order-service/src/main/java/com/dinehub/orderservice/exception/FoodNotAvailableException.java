@@ -1,4 +1,9 @@
 package com.dinehub.orderservice.exception;
 
-public class FoodNotAvailableException {
+import com.dinehub.orderservice.entity.Order;
+
+public class FoodNotAvailableException extends RuntimeException {
+    public FoodNotAvailableException(String s) {
+        super(s);
+    }
 }

@@ -2,13 +2,12 @@ package com.dinehub.orderservice.entity;
 
 import com.dinehub.orderservice.enums.OrderStatus;
 import com.dinehub.orderservice.enums.OrderType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -21,20 +20,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
-
+    @Id
     private Long orderId;
+
+    @NotNull(message = "User ID is required")
+    @Positive(message = "User ID must be greater than 0")
     private Long userId;
-    @OneToMany(
-            mappedBy = "order",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+
+    @NotEmpty(message = "Order must contain at least one item")
+    @Valid
     private List<Items> items = new ArrayList<>();
+
+    @DecimalMin(value = "0.0", inclusive = true,
+            message = "Total price cannot be negative")
     private BigDecimal totalPrice;
-    @Enumerated(EnumType.STRING)
+
+    @NotNull(message = "Order type is required")
     private OrderType orderType;
-    @Enumerated(EnumType.STRING)
+
     private OrderStatus orderStatus;
+
+    @PastOrPresent(message = "createdAt must not be in future")
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }

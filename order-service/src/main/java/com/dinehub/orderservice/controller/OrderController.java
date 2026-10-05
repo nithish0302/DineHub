@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +35,12 @@ public class OrderController {
                 );
     }
 
+    @GetMapping("/confirm/{orderId}")
+    public ResponseEntity<Order> confirmOrder(@PathVariable Long orderId){
+        orderService.confirmOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/update/{orderId}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long orderId,@Valid @RequestBody Order order){
         return ResponseEntity.ok(
@@ -47,4 +54,11 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/getUserId/{userId}")
+    public ResponseEntity<List<Order>> getOrderByUserId(@PathVariable Long userId){
+        return ResponseEntity.ok(
+                orderService
+                        .getOrderByUserId(userId)
+        );
+    }
 }
