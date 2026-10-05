@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
         existingOrder.setOrderStatus(OrderStatus.CONFIRMED);
 
         Order savedOrder = orderServiceRepository.save(existingOrder);
-        
+
     }
 
     @Override
