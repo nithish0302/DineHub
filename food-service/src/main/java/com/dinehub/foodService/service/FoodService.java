@@ -15,4 +15,6 @@ public interface FoodService {
     Food updateFood(Long foodId, Food food);
 
     void deleteFood(Long foodId);
+
+    void updateFoodCount(Long foodId, Integer neededQuantity);
 }

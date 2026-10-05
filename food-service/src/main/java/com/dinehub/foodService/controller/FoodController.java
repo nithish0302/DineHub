@@ -53,6 +53,15 @@ public class FoodController {
         );
     }
 
+    @PutMapping("/update/foodCount/{foodId}")
+    public ResponseEntity<Void> updateFoodCount(
+            @PathVariable Long foodId,
+            @RequestBody Integer neededQuantity) {
+        foodService.updateFoodCount(foodId, neededQuantity);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/delete/{foodId}")
     public ResponseEntity<Void> deleteFood(
             @PathVariable Long foodId) {
@@ -61,5 +70,6 @@ public class FoodController {
 
         return ResponseEntity.noContent().build();
     }
-    
+
+
 }
